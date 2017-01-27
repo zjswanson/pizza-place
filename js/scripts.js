@@ -31,18 +31,39 @@ function Menu (){
   this.veggies = ["olives","bell pepper","hot pepper","spinach","pineapple","zucchini","mushroom"]
 }
 // method for adding and removing pizza elements
-Pizza.prototype.addToPizza =function(category,element) {
-  this[category].push(element);
+
+Pizza.prototype.togglePizzaItem = function(element,category) {
+  console.log(category);
+  console.log(element);
+  if (category === "sizes") {
+    this.pizzaSize = size;
+  } else {
+    var check = this[category].valueOf();
+    if (check.includes(element)) {
+      var elementIndex = this[category].indexOf(element);
+      this[category].splice(elementIndex,1);
+    } else {
+      this[category].push(element);
+    };
+  };
+  console.log(this);
 };
 
-Pizza.prototype.removeFromPizza = function (category,element) {
-  var elementIndex = this[category].indexOf(element);
-  this[category].splice(elementIndex,1);
-};
 
-Pizza.prototype.changePizzaSize = function (size) {
-  this.pizzaSize = size;
-};
+
+
+// Pizza.prototype.addToPizza =function(category,element) {
+//   this[category].push(element);
+// };
+//
+// Pizza.prototype.removeFromPizza = function (category,element) {
+//   var elementIndex = this[category].indexOf(element);
+//   this[category].splice(elementIndex,1);
+// };
+//
+// Pizza.prototype.changePizzaSize = function (size) {
+//
+// };
 
 // method to calculate costs:
 // small: $10, includes 1 sauce, 1 cheese, 2 toppings(0-1 meat). Extra meat or cheese $1.5, extra sauce or topping $0.75.
@@ -87,13 +108,13 @@ Pizza.prototype.pizzaCost = function () {
 
 // method to populate menu in display
 Menu.prototype.displayMenu = function () {
-  $("#menu").empty();
+  $("#menu").children("div").empty();
   for (i=0;i<Object.keys(this).length;i++){
     var category = Object.getOwnPropertyNames(this)[i];
     var menuSection = "";
-    menuSection = menuSection + "<div class='" + category + "'><h4>" + category + "</h4><ul>";
+    menuSection = menuSection + "<h4>" + category + "</h4><ul>";
     for (n=0;n<this[category].length;n++){
-      menuSection = menuSection + "<li>" +this[category][n]+ "</li>"
+      menuSection = menuSection + "<li class='" +category + "'>" +this[category][n]+ "</li>"
     };
     menuSection = menuSection +"</ul>";
     $("#menu").append(menuSection);
@@ -118,9 +139,13 @@ var displayPizza = function(pizza) {
 
 $(document).ready(function() {
   menu.displayMenu();
-  // $("#menu li").click() {
-  //   this.addClass(.onPizza);
-  // }
+  displayPizza(testpizza); // Here for testing only.  REmove when interface is done.
+  $("#menu li").click(function() {
+    var item = $(this).text();
+    var category = $(this).attr("class").replace(/s(?!.)/,"");  currentPizza.togglePizzaItem(item,category);
+
+  });
+
 
 
 });
