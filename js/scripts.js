@@ -5,7 +5,9 @@ var testpizza = new Pizza;
 testpizza.sauce = ["pesto"];
 testpizza.cheese= ["ricotta", "parmesean"];
 testpizza.meat = ["sausage"];
-testpizza.veggies = ["spinach", "olives"]
+testpizza.veggies = ["spinach", "olives"];
+testpizza.pizzaName = "Billiam"
+testpizza.pizzaSize = "large";
 
 // defines the objects used by the page
 function Pizza (){
@@ -85,6 +87,7 @@ Pizza.prototype.pizzaCost = function () {
 
 // method to populate menu in display
 Menu.prototype.displayMenu = function () {
+  $("#menu").empty();
   for (i=0;i<Object.keys(this).length;i++){
     var category = Object.getOwnPropertyNames(this)[i];
     var menuSection = "";
@@ -95,6 +98,22 @@ Menu.prototype.displayMenu = function () {
     menuSection = menuSection +"</ul>";
     $("#menu").append(menuSection);
   };
+};
+//
+var displayPizza = function(pizza) {
+  $("#pizzaDetail").empty();
+  $("#pizzaDetail").append("<h3>"+ pizza["pizzaName"] + "</h3><h4>Size: "+pizza["pizzaSize"]+"</h4>");
+  for (i=2;i<6;i++) {
+    var category = Object.getOwnPropertyNames(pizza)[i];
+    var pizzaTopping = "";
+    pizzaTopping = pizzaTopping + "<div class='" + category + "'><h4>" + category + "</h4><ul>";
+    for (n=0;n<pizza[category].length;n++){
+      pizzaTopping = pizzaTopping + "<li>" +pizza[category][n]+ "</li>"
+    };
+    pizzaTopping = pizzaTopping +"</ul>";
+    $("#pizzaDetail").append(pizzaTopping);
+  };
+  $("#pizzaDetail").append("<h3>Total Cost: $" +pizza["cost"]+"</h3>");
 };
 
 $(document).ready(function() {
