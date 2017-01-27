@@ -1,8 +1,12 @@
+var currentPizza = new Pizza;
+var myOrder = new Order;
+var menu = new Menu;
 var testpizza = new Pizza;
 testpizza.sauce = ["pesto"];
 testpizza.cheese= ["ricotta", "parmesean"];
 testpizza.meat = ["sausage"];
 testpizza.veggies = ["spinach", "olives"]
+
 // defines the objects used by the page
 function Pizza (){
   this.pizzaName = "";
@@ -17,6 +21,13 @@ function Pizza (){
 function Order (){
 };
 
+function Menu (){
+  this.sizes = ["small","medium","large"];
+  this.sauces = ["marinara","pesto","oil and garlic"];
+  this.cheeses = ["mozzarella","ricotta","parmesean"];
+  this.meats = ["sausage","pepperoni","grilled chicken","canadian bacon"]
+  this.veggies = ["olives","bell pepper","hot pepper","spinach","pineapple","zucchini","mushroom"]
+}
 // method for adding and removing pizza elements
 Pizza.prototype.addToPizza =function(category,element) {
   this[category].push(element);
@@ -36,7 +47,6 @@ Pizza.prototype.changePizzaSize = function (size) {
 // medium: $15, includes 1 sauce, 1 cheese, 2 toppings(0-1 meat). Extra meat or cheese $2, extra sauce or topping $1.
 // large: $20, includes 1 sauce, 1 cheese, 2 toppings(0-1 meat). Extra meat or cheese $3, extra sauce or topping $1.50.
 
-
 Pizza.prototype.pizzaCost = function () {
   var cost=0;
   var expensiveTopping;
@@ -54,27 +64,44 @@ Pizza.prototype.pizzaCost = function () {
     expensiveTopping = 3;
     cheapTopping = 1.50;
   }
-  console.log(cost);
   if (this.sauce.length > 1) {
     cost += (this.sauce.length-1)*cheapTopping;
-    console.log(cost);
   }
   if (this.cheese.length > 1) {
     cost += (this.cheese.length-1)*expensiveTopping;
-    console.log(cost);
   }
   if (this.meat.length > 1) {
     cost += (this.meat.length-1)*expensiveTopping;
-    console.log(cost);
   }
   if (this.veggies.length > 1) {
     if (this.meat.length>0){
       cost += (this.sauce.length-2)*cheapTopping;
-      console.log(cost);
     } else {
       cost += (this.sauce.length-1)*cheapTopping;
-      console.log(cost);
     }
   }
   this.cost = cost;
 };
+
+// method to populate menu in display
+Menu.prototype.displayMenu = function () {
+  for (i=0;i<Object.keys(this).length;i++){
+    var category = Object.getOwnPropertyNames(this)[i];
+    var menuSection = "";
+    menuSection = menuSection + "<div class='" + category + "'><h4>" + category + "</h4><ul>";
+    for (n=0;n<this[category].length;n++){
+      menuSection = menuSection + "<li>" +this[category][n]+ "</li>"
+    };
+    menuSection = menuSection +"</ul>";
+    $("#menu").append(menuSection);
+  };
+};
+
+$(document).ready(function() {
+  menu.displayMenu();
+  // $("#menu li").click() {
+  //   this.addClass(.onPizza);
+  // }
+
+
+});
