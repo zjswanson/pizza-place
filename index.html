@@ -19,16 +19,27 @@
         <div class="col-md-8" id="menu">
           <h2>Menu</h2>
           <p>Click to add toppings to your pizza</p>
-          <button type="button" name="button">Build New Pizza</button>
+          <button class="btn" type="button" id="build">Build New Pizza</button>
         </div>
-        <div class="col-md-4" id=pizzaDetail>
+        <div class="col-md-4">
           <h3>Your Pizza</h3>
+          <input class="form-control" type="text" id="pizzanamer">
+          <label for="pizzaname">Name your pizza</label>
+          <div id=pizzaDetail>
+
+          </div>
+          <button class="btn" type="button" id="add">Add to Order</button>
         </div>
 
       </div>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12" >
           <h3>Your Order</h3>
+          <h3 id="totalcost">Total Cost: </h3>
+          <!-- <button class="btn" type="button" id="order">Place Order</button> -->
+          <ul id="orderDetail">
+
+          </ul>
 
         </div>
 

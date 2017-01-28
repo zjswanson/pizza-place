@@ -24,19 +24,17 @@ function Order (){
 };
 
 function Menu (){
-  this.sizes = ["small","medium","large"];
-  this.sauces = ["marinara","pesto","oil and garlic"];
-  this.cheeses = ["mozzarella","ricotta","parmesean"];
-  this.meats = ["sausage","pepperoni","grilled chicken","canadian bacon"]
+  this.pizzaSize = ["small","medium","large"];
+  this.sauce = ["marinara","pesto","oil and garlic"];
+  this.cheese = ["mozzarella","ricotta","parmesean"];
+  this.meat = ["sausage","pepperoni","grilled chicken","canadian bacon"]
   this.veggies = ["olives","bell pepper","hot pepper","spinach","pineapple","zucchini","mushroom"]
 }
 // method for adding and removing pizza elements
 
 Pizza.prototype.togglePizzaItem = function(element,category) {
-  console.log(category);
-  console.log(element);
-  if (category === "sizes") {
-    this.pizzaSize = size;
+  if (category === "pizzaSize") {
+    this.pizzaSize = element;
   } else {
     var check = this[category].valueOf();
     if (check.includes(element)) {
@@ -46,24 +44,7 @@ Pizza.prototype.togglePizzaItem = function(element,category) {
       this[category].push(element);
     };
   };
-  console.log(this);
 };
-
-
-
-
-// Pizza.prototype.addToPizza =function(category,element) {
-//   this[category].push(element);
-// };
-//
-// Pizza.prototype.removeFromPizza = function (category,element) {
-//   var elementIndex = this[category].indexOf(element);
-//   this[category].splice(elementIndex,1);
-// };
-//
-// Pizza.prototype.changePizzaSize = function (size) {
-//
-// };
 
 // method to calculate costs:
 // small: $10, includes 1 sauce, 1 cheese, 2 toppings(0-1 meat). Extra meat or cheese $1.5, extra sauce or topping $0.75.
@@ -98,9 +79,9 @@ Pizza.prototype.pizzaCost = function () {
   }
   if (this.veggies.length > 1) {
     if (this.meat.length>0){
-      cost += (this.sauce.length-2)*cheapTopping;
+      cost += (this.veggies.length-1)*cheapTopping;
     } else {
-      cost += (this.sauce.length-1)*cheapTopping;
+      cost += (this.veggies.length-2)*cheapTopping;
     }
   }
   this.cost = cost;
@@ -108,7 +89,6 @@ Pizza.prototype.pizzaCost = function () {
 
 // method to populate menu in display
 Menu.prototype.displayMenu = function () {
-  $("#menu").children("div").empty();
   for (i=0;i<Object.keys(this).length;i++){
     var category = Object.getOwnPropertyNames(this)[i];
     var menuSection = "";
@@ -127,25 +107,49 @@ var displayPizza = function(pizza) {
   for (i=2;i<6;i++) {
     var category = Object.getOwnPropertyNames(pizza)[i];
     var pizzaTopping = "";
-    pizzaTopping = pizzaTopping + "<div class='" + category + "'><h4>" + category + "</h4><ul>";
+    pizzaTopping = pizzaTopping + "<h4>" + category + "</h4><ul>";
     for (n=0;n<pizza[category].length;n++){
       pizzaTopping = pizzaTopping + "<li>" +pizza[category][n]+ "</li>"
     };
     pizzaTopping = pizzaTopping +"</ul>";
     $("#pizzaDetail").append(pizzaTopping);
   };
-  $("#pizzaDetail").append("<h3>Total Cost: $" +pizza["cost"]+"</h3>");
+  $("#pizzaDetail").append("<h3>Cost: $" +pizza["cost"]+"</h3>");
 };
 
 $(document).ready(function() {
   menu.displayMenu();
-  displayPizza(testpizza); // Here for testing only.  REmove when interface is done.
+  displayPizza(currentPizza);
   $("#menu li").click(function() {
     var item = $(this).text();
-    var category = $(this).attr("class").replace(/s(?!.)/,"");  currentPizza.togglePizzaItem(item,category);
-
+    var category = $(this).attr("class");  currentPizza.togglePizzaItem(item,category);
+    currentPizza.pizzaCost();
+    displayPizza(currentPizza);
   });
 
+  $("#build").click(function(){
+    currentPizza = new Pizza;
+    displayPizza(currentPizza);
+  });
 
+  $("#add").click(function(){
+    counter = Object.keys(myOrder).length+1;
+    currentPizza.pizzaName = $("#pizzanamer").val();
+    if (currentPizza.pizzaName.length<1) {
+      console.log("true");
+      currentPizza.pizzaName = "pizza" + counter;
+    }
+    myOrder["pizza"+counter]=currentPizza;
+    $("ul#orderDetail").empty();
+    var totalcost = 0;
+    for (i=1;i<=Object.keys(myOrder).length;i++) {
+      var name = myOrder["pizza"+i]["pizzaName"].valueOf();
+      var cost = myOrder["pizza"+i]["cost"].valueOf();
+      $("ul#orderDetail").append("<li>" + name +":  cost $"+cost +"</li>");
+      totalcost += cost;
+    };
+    $("#totalcost").text("Total Cost: " + totalcost);
+
+  });
 
 });
