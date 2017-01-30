@@ -1,0 +1,29 @@
+body {
+  background-image: url(../laser-background.jpg);
+  background-position: center;
+  background-size: cover;
+}
+
+#about {
+  display: block;
+}
+
+#totalcost {
+  float: right;
+}
+
+#mainWindow {
+  display: none;
+}
+
+.laserbox {
+  background: grey;
+  padding: 10px;
+  border: 2px solid #ff69b4;
+}
+
+li {
+  display: inline;
+  padding: 5px;
+  margin: 5px;
+}

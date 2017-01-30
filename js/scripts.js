@@ -122,7 +122,9 @@ $(document).ready(function() {
   displayPizza(currentPizza);
   $("#menu li").click(function() {
     var item = $(this).text();
-    var category = $(this).attr("class");  currentPizza.togglePizzaItem(item,category);
+    var category = $(this).attr("class");
+    var check = currentPizza.category
+    currentPizza.togglePizzaItem(item,category);
     currentPizza.pizzaCost();
     displayPizza(currentPizza);
   });
@@ -149,7 +151,11 @@ $(document).ready(function() {
       totalcost += cost;
     };
     $("#totalcost").text("Total Cost: " + totalcost);
+  });
 
+  $("#enterButton").click(function(){
+    $("#aboutWindow").toggle();
+    $("#mainWindow").toggle();
   });
 
 });
